@@ -39,7 +39,7 @@ module.exports.createListing = async (req, res) => {
 
   const location = req.body.listing.location;
 
-  // 🌐 Geocode with Nominatim
+  // Geocode with Nominatim
   try {
     const response = await axios.get("https://nominatim.openstreetmap.org/search", {
       params: {
