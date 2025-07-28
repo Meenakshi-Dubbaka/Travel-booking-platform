@@ -5,7 +5,7 @@ if(process.env.NODE_ENV!="production"){
 
 const express=require("express");
 const app=express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const path=require("path");
 const mongoose=require("mongoose");
 const methodOverride=require("method-override");
@@ -32,7 +32,7 @@ async function main() {
 main().then(()=>{
 console.log("connected to DB")
 }).catch((err)=>{
-    console.log(err);s
+    console.log(err);
 });
 
 app.engine("ejs",ejsMate);
@@ -81,24 +81,20 @@ app.use((req,res,next)=>{
     res.locals.errormsg=req.flash("error");
     next();
 })
-// app.get("/demouser",async(req,res)=>{
-//     let fakeuser=new User({
-//         email:"student@gmail.com",
-//         username:"delta-student",
-//     })
-//     let registerdUser=await User.register(fakeuser,"helloworld");
-//     res.send(registerdUser);
-// })
+
 
 
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews",reviewRouter);
 app.use("/",userRouter);
 
+app.get("/",(req,res)=>{
+    res.render("index");
+});
 
 
 
-// Instead of "*", use ":anything"
+// Unmatched routes
 app.all('/:unmatchedRoute', (req, res,next) => {
    next(new ExpressError(404,"page not found!"));
 });
