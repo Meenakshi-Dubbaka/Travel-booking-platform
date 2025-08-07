@@ -68,9 +68,9 @@ const sessionOptions={
 app.use(session(sessionOptions));
 app.use(flash());
 
-app.use(passport.initialize());//step-1 to user passport
-app.use(passport.session());// step-2 to identify same logged in from page to page
-passport.use(new LocalStrategy(User.authenticate()));// step-3 to use local strategy user to use authenticate method
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
