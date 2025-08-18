@@ -7,7 +7,6 @@ const {reviewSchema}=require("./schema.js");
 module.exports.isLoggedIn = (customMessage = "You must be signed in to access this page.") => {
   return (req, res, next) => {
     if (!req.isAuthenticated()) {
-      // Only store the URL if it's a safe GET request
       if (req.method === "GET") {
         req.session.redirectUrl = req.originalUrl;
       }

@@ -27,7 +27,6 @@ module.exports.showListing=async (req,res)=>{
     res.render("listings/show.ejs",{listing,mapToken: process.env.MAP_TOKEN});
 };
 
-
 module.exports.createListing = async (req, res) => {
   let url = req.file.path;
   let filename = req.file.filename;
@@ -114,14 +113,14 @@ module.exports.deleteListing=async (req,res)=>{
 
 module.exports.searchListings = async (req, res) => {
   try{
-      const query = req.query.q?.trim()  || ""; // ?q=beach
-        // If query is empty → redirect back with error
+      const query = req.query.q?.trim()  || ""; 
+        // If query is empty redirect back with error
     if (!query) {
       req.flash("error", "Please enter something to search.");
       return res.redirect("/listings");
     }
 
-  // Search in title, description, or location
+
   const results = await Listing.find({
     $or: [
       { title: { $regex: query, $options: "i" } },
