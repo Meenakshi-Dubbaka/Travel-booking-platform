@@ -9,6 +9,11 @@ const {storage}= require("../cloudConfig.js")
 const upload = multer({ storage })
 
 
+
+router.use((req, res, next) => {
+  console.log("Matched URL:", req.originalUrl);
+  next();
+});
 // Index Route
 router
 .route("/")
@@ -23,10 +28,7 @@ wrapAsync(listingController.createListing));
 router.get("/new",
     isLoggedIn("You must be signed in to create a listing."),
     listingController.renderNewForm)
-router.use((req, res, next) => {
-  console.log("Matched URL:", req.originalUrl);
-  next();
-});
+
 
 //search route
 router.get("/search", wrapAsync(listingController.searchListings));
