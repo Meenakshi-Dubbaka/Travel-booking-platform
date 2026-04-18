@@ -47,9 +47,10 @@
   <% if (!locals.currUser) { %>
     <a class="nav-link" href="/signup"><b>SignUp</b></a>
     <a class="nav-link" href="/login"><b>Login</b></a>
-<% } else { %>
+  <% } %>
+  <% if (locals.currUser) { %> 
     <a class="nav-link" href="/logout"><b>Logout</b></a>
-<% } %>
+  <% } %>
 </div>
     </div>
   </div>
