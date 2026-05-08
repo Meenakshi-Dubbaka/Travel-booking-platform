@@ -5,7 +5,7 @@ const Review=require("../models/reviews.js");
 const Listing=require("../models/listing.js");
 const {isLoggedIn,validatereview, isReviewAuthor}=require("../middleware.js");
 
-const reviewController=require("../contoller/reviews.js");
+const reviewController=require("../controller/reviews.js");
 
 
 

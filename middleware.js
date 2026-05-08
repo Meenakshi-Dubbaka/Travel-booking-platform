@@ -7,6 +7,10 @@ const {reviewSchema}=require("./schema.js");
 module.exports.isLoggedIn = (customMessage = "You must be signed in to access this page.") => {
   return (req, res, next) => {
     if (!req.isAuthenticated()) {
+      // Handle fetch/API requests
+      if (req.headers["content-type"]?.includes("application/json")) {
+        return res.status(401).json({ error: "Not logged in" });
+      }
       if (req.method === "GET") {
         req.session.redirectUrl = req.originalUrl;
       }

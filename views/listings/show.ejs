@@ -16,6 +16,8 @@
           <%= listing.location %><br>
           <%= listing.country %>
         </p>
+        <button id="pay-btn" class="btn btn-primary">Book Now</button>
+       
 
         <% if (currUser && currUser._id.equals(listing.owner._id)) { %>
           <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark add-btn">Edit</a>
@@ -91,4 +93,74 @@
   </div> 
 </div> 
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+ window.addEventListener("DOMContentLoaded", () => {
+  const payBtn =
+  document.getElementById("pay-btn");
+
+  payBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+      const response =
+      await fetch("/payment/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials:"include",
+        body: JSON.stringify({
+          listingId: "<%= listing._id %>"
+        })
+      });
+
+      const order =
+      await response.json(); 
+      const options = {
+        key:"<%- razorpayKey %>",
+        amount: order.amount,
+        currency: order.currency,
+        order_id: order.id,
+        name: "Wanderlust",
+        description: "<%= listing.title %>",
+        handler: async function (response) {
+          const verifyRes =
+          await fetch("/payment/verify-payment", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              ...response,
+              listingId: "<%= listing._id %>"
+            })
+          });
+          const result =
+          await verifyRes.json();
+
+          if(result.success){
+            window.location.href = "/payment/booking-success/<%= listing._id %>";;
+          } else {
+            alert("Payment Failed");
+          }
+        },
+         prefill: {
+          name: "<%= currUser ? currUser.username : '' %>",
+          email: "<%= currUser ? currUser.email : '' %>"
+        },
+        theme: {
+          color: "#3399cc"
+        }
+      }; 
+      const rzp =
+      new Razorpay(options);       
+      rzp.open();
+    } catch (err) {
+      alert("Something went wrong");
+    }
+  });
+});
+
+</script>
 <script src="/js/map.js"></script>

@@ -25,7 +25,8 @@ module.exports.showListing = async (req, res) => {
     req.flash("error", "The listing you requested for does not exsits");
     return res.redirect("/listings");
   }
-  res.render("listings/show.ejs", { listing });
+  const key = process.env.RAZORPAY_KEY_ID;
+  res.render("listings/show.ejs", { listing, razorpayKey: key });
 };
 
 module.exports.createListing = async (req, res) => {
